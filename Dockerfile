@@ -2,7 +2,7 @@
 FROM node:14
 
 # Устанавливаем пакет cron внутри контейнера
-RUN apt-get update && apt-get -y install cron \
+RUN apt-get update && apt-get -y install cron sqlite3 \
     libnss3 \
     libnss3-tools \
     libatk1.0-0 \
