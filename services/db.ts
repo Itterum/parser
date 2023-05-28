@@ -1,46 +1,34 @@
 import { Product } from '../scrap_functions/centrsvyazi';
-import { Database } from 'sqlite3';
+import { MongoClient } from 'mongodb';
+import { v4 as uuidv4 } from 'uuid';
 
-const createProductTable = `
-    CREATE TABLE IF NOT EXISTS products (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        newPriceValue REAL,
-        newPriceCurrency TEXT,
-        oldPriceValue REAL,
-        oldPriceCurrency TEXT,
-        image TEXT
-    )`;
+const uri = 'mongodb://mongodb:27017';
+const dbName = 'productsDB';
+const collectionName = 'products';
 
 export async function writeProductsToDB(products: Product[]) {
-    const db = new Database('./products.db');
-    // Создание таблицы, если она не существует
-    db.exec(createProductTable);
-    // Сохранение каждого продукта в базу данных
+  const client = new MongoClient(uri);
+
+  try {
+    await client.connect();
+    console.log('Успешное подключение к MongoDB');
+
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+
     for (const product of products) {
-        db.run(`INSERT INTO products (
-                name, 
-                newPriceValue, 
-                newPriceCurrency, 
-                oldPriceValue, 
-                oldPriceCurrency, 
-                image) VALUES (?, ?, ?, ?, ?, ?)`,
-            [
-                product.name,
-                product.newPrice.value,
-                product.newPrice.currency,
-                product.oldPrice.value,
-                product.oldPrice.currency,
-                product.image
-            ],
-            (err) => {
-                if (err) {
-                    console.error('Ошибка при сохранении продукта в базе данных:', err);
-                }
-            }
-        );
+      const productWithId = {
+        ...product,
+        id: uuidv4(), // Генерируем уникальный идентификатор
+      };
+
+      await collection.insertOne(productWithId);
     }
 
     console.log('Товары успешно сохранены в базе данных.');
-    db.close();
+  } catch (err) {
+    console.error('Ошибка при сохранении продуктов в базе данных:', err);
+  } finally {
+    await client.close();
+  }
 }
