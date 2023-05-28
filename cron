@@ -1,0 +1,1 @@
+*/5 * * * * cd /app && /usr/local/bin/node /usr/local/bin/npm run dev-centr >> /app/logs/cron.log 2>&1

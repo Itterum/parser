@@ -4,5 +4,3 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - MONGO_URI=mongodb+srv://itterum:z2403i3@test-db.ijnw4wo.mongodb.net/?retryWrites=true&w=majority

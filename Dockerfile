@@ -2,7 +2,7 @@
 FROM node:14
 
 # Устанавливаем пакет cron внутри контейнера
-RUN apt-get update && apt-get -y install cron mongo-tools \
+RUN apt-get update && apt-get -y install cron \
     libnss3 \
     libnss3-tools \
     libatk1.0-0 \
@@ -44,4 +44,4 @@ RUN chmod 0644 /etc/cron.d/cron
 RUN crontab /etc/cron.d/cron
 
 # Запускаем cron и скрипт при старте контейнера
-CMD cron && npm run dev-centr & tail -f /dev/null
+CMD cron && npm run dev & tail -f /dev/null
