@@ -5,7 +5,7 @@ interface Price {
     currency: string;
 }
 
-interface Product {
+export interface Product {
     name: string;
     newPrice: Price;
     oldPrice: Price;
