@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { CronJob } from 'cron';
-import { getOldestProductFromDB } from '../../parser/src/db';
+import { getProductFromDB, deleteProductFromDB } from '../../parser/src/db';
 
 const token = process.env.TOKEN;
 
@@ -30,13 +30,14 @@ async function schedulePostSending() {
     };
 
     try {
-        const data = await getOldestProductFromDB();
+        const data = await getProductFromDB();
         if (data) {
             postMessage.name = data.name;
             postMessage.newPrice = data.newPrice.value;
             postMessage.oldPrice = data.oldPrice.value;
             postMessage.currency = data.newPrice.currency;
             postMessage.image = data.image;
+            deleteProductFromDB(data);
         }
     } catch (err) {
         console.error('Ошибка при получении самой старой записи из базы данных:', err);

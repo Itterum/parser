@@ -33,7 +33,7 @@ export async function writeProductsToDB(products: Product[]) {
   }
 }
 
-export async function getOldestProductFromDB() {
+export async function getProductFromDB() {
   const client = new MongoClient(uri);
   let result = null;
 
@@ -44,12 +44,35 @@ export async function getOldestProductFromDB() {
     const db = client.db(dbName);
     const collection = db.collection(collectionName);
 
-    const deletionResult = await collection.findOneAndDelete({}, { sort: { createdAt: 1 } });
-    result = deletionResult.value;
+    const deletionResult = await collection.findOne({}, { sort: { createdAt: 1 } });
+    result = deletionResult;
 
-    console.log('Самая старая запись получена и удалена из базы данных.');
+    console.log('Самая старая запись получена из базы данных.');
   } catch (err) {
-    console.error('Ошибка при получении и удалении самой старой записи из базы данных:', err);
+    console.error('Ошибка при получении самой старой записи из базы данных:', err);
+  } finally {
+    await client.close();
+  }
+
+  return result;
+}
+
+export async function deleteProductFromDB(oldestRecord: any) {
+  const client = new MongoClient(uri);
+  let result = null;
+
+  try {
+    await client.connect();
+    console.log('Успешное подключение к MongoDB');
+
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+
+    await collection.deleteOne({ _id: oldestRecord._id });
+
+    console.log('Самая старая запись удалена из базы данных.');
+  } catch (err) {
+    console.error('Ошибка при удалении самой старой записи из базы данных:', err);
   } finally {
     await client.close();
   }
