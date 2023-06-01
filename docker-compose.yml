@@ -26,4 +26,5 @@ services:
     restart: always
     environment:
       - START_COMMAND=npm run start-bot
-      
+    env_file:
+      - ./env_file.txt

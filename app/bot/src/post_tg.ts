@@ -2,11 +2,11 @@ import TelegramBot from 'node-telegram-bot-api';
 import { CronJob } from 'cron';
 import { getOldestProductFromDB } from '../../parser/src/db';
 
-const token = '';
+const token = process.env.TOKEN;
 
 const channelUsername = '@memspepe';
 
-const bot = new TelegramBot(token, { polling: true });
+const bot = new TelegramBot(token || '', { polling: true });
 
 // Функция для отправки поста в канал
 function sendPostToChannel(message: string) {
