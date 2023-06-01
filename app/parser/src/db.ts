@@ -1,4 +1,4 @@
-import { Product } from '../scrap_functions/centrsvyazi';
+import { Product } from './centrsvyazi';
 import { MongoClient } from 'mongodb';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -19,7 +19,7 @@ export async function writeProductsToDB(products: Product[]) {
     for (const product of products) {
       const productWithId = {
         ...product,
-        id: uuidv4(), // Генерируем уникальный идентификатор
+        id: uuidv4(),
       };
 
       await collection.insertOne(productWithId);
@@ -31,4 +31,27 @@ export async function writeProductsToDB(products: Product[]) {
   } finally {
     await client.close();
   }
+}
+
+export async function getOldestProductFromDB() {
+  const client = new MongoClient(uri);
+  let result = {};
+
+  try {
+    await client.connect();
+    console.log('Успешное подключение к MongoDB');
+
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+
+    result = await collection.findOneAndDelete({}, { sort: { createdAt: 1 } });
+
+    console.log('Самая старая запись получена и удалена из базы данных.');
+  } catch (err) {
+    console.error('Ошибка при получении и удалении самой старой записи из базы данных:', err);
+  } finally {
+    await client.close();
+  }
+
+  return result;
 }

@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
-import { writeProductsToDB } from '../services/db';
-import { parsePage } from '../scrap_functions/centrsvyazi';
+import { writeProductsToDB } from './db';
+import { parsePage } from './centrsvyazi';
 
 export async function scrapController(url: string) {
     const browser = await chromium.launch();

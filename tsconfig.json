@@ -7,6 +7,14 @@
       "dom"
     ],
     "strict": true,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "rootDir": "app"
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "app"
+  ]
 }

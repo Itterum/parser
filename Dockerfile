@@ -1,8 +1,6 @@
-# Используем официальный образ Node.js
 FROM node:14
 
-# Устанавливаем пакет cron внутри контейнера
-RUN apt-get update && apt-get -y install cron \
+RUN apt-get update && apt-get -y install \
     libnss3 \
     libnss3-tools \
     libatk1.0-0 \
@@ -22,17 +20,12 @@ RUN apt-get update && apt-get -y install cron \
     libgtk-3-0 \
     libgdk-pixbuf2.0-0
 
-# Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
 
-# Копируем package.json и package-lock.json в рабочую директорию
 COPY package*.json ./
 
-# Устанавливаем зависимости
 RUN npm install
 
-# Копируем исходный код в рабочую директорию
 COPY . .
 
-# Запускаем cron и скрипт при старте контейнера
-CMD cron && npm run dev
+CMD npm run build && npm run start
