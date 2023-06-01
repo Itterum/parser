@@ -35,7 +35,7 @@ export async function writeProductsToDB(products: Product[]) {
 
 export async function getOldestProductFromDB() {
   const client = new MongoClient(uri);
-  let result = {};
+  let result = null;
 
   try {
     await client.connect();
@@ -44,7 +44,8 @@ export async function getOldestProductFromDB() {
     const db = client.db(dbName);
     const collection = db.collection(collectionName);
 
-    result = await collection.findOneAndDelete({}, { sort: { createdAt: 1 } });
+    const deletionResult = await collection.findOneAndDelete({}, { sort: { createdAt: 1 } });
+    result = deletionResult.value;
 
     console.log('Самая старая запись получена и удалена из базы данных.');
   } catch (err) {

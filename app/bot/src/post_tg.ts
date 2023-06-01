@@ -2,7 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import { CronJob } from 'cron';
 import { getOldestProductFromDB } from '../../parser/src/db';
 
-const token = '6142425843:AAECyuIVclaxIrEYMvy7xfhkDNFT8-XM064';
+const token = '';
 
 const channelUsername = '@memspepe';
 
@@ -19,14 +19,31 @@ function sendPostToChannel(message: string) {
         });
 }
 
-function schedulePostSending() {
+async function schedulePostSending() {
     const schedule = '*/5 * * * *';
-    let postMessage = {};
-    getOldestProductFromDB().then(v => {
-        postMessage = v;
-    });
+    let postMessage = {
+        name: '',
+        newPrice: '',
+        oldPrice: '',
+        currency: '',
+        image: '',
+    };
+
+    try {
+        const data = await getOldestProductFromDB();
+        if (data) {
+            postMessage.name = data.name;
+            postMessage.newPrice = data.newPrice.value;
+            postMessage.oldPrice = data.oldPrice.value;
+            postMessage.currency = data.newPrice.currency;
+            postMessage.image = data.image;
+        }
+    } catch (err) {
+        console.error('Ошибка при получении самой старой записи из базы данных:', err);
+    }
+
     const job = new CronJob(schedule, () => {
-        sendPostToChannel(`${postMessage}`);
+        sendPostToChannel(`Name: ${postMessage.name}\nNew price: ${postMessage.newPrice} ${postMessage.currency}\nOld price: ${postMessage.oldPrice} ${postMessage.currency}\nImage: ${postMessage.image}`);
     });
 
     job.start();

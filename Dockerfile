@@ -28,4 +28,9 @@ RUN npm install
 
 COPY . .
 
-CMD npm run build && npm run start
+RUN npm install -g typescript
+
+ENV START_COMMAND npm run start
+ENV START_BOT_COMMAND npm run start-bot
+
+CMD npm run build && $START_COMMAND

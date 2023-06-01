@@ -5,9 +5,10 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
-    command: npm run start
     depends_on:
       - mongodb
+    environment:
+      - START_COMMAND=npm run start
   
   mongodb:
     image: mongo:3
@@ -23,4 +24,6 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
-    command: npm run start-bot
+    environment:
+      - START_COMMAND=npm run start-bot
+      
