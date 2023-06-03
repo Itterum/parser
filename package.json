@@ -4,11 +4,11 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "dev": "ts-node ./src/main.ts",
+    "dev": "ts-node ./parser/main.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node ./dist/parser/main.js",
 
-    "dev-bot": "ts-node ./src/post_tg.ts",
+    "dev-bot": "ts-node ./bot/src/post_tg.ts",
     "start-bot": "node ./dist/bot/src/post_tg.js"
   },
   "keywords": [],

@@ -8,7 +8,6 @@ const channelUsername = '@memspepe';
 
 const bot = new TelegramBot(token || '', { polling: true });
 
-// Функция для отправки поста в канал
 function sendPostToChannel(message: string) {
     bot.sendMessage(channelUsername, message)
         .then(() => {
@@ -29,22 +28,21 @@ async function schedulePostSending() {
         image: '',
     };
 
-    try {
-        const data = await getProductFromDB();
-        if (data) {
-            postMessage.name = data.name;
-            postMessage.newPrice = data.newPrice.value;
-            postMessage.oldPrice = data.oldPrice.value;
-            postMessage.currency = data.newPrice.currency;
-            postMessage.image = data.image;
-            deleteProductFromDB(data);
+    const job = new CronJob(schedule, async () => {
+        try {
+            const data = await getProductFromDB();
+            if (data) {
+                postMessage.name = data.name;
+                postMessage.newPrice = data.newPrice.value;
+                postMessage.oldPrice = data.oldPrice.value;
+                postMessage.currency = data.newPrice.currency;
+                postMessage.image = data.image;
+                await deleteProductFromDB(data);
+                sendPostToChannel(`Name: ${postMessage.name}\nNew price: ${postMessage.newPrice} ${postMessage.currency}\nOld price: ${postMessage.oldPrice} ${postMessage.currency}\nImage: ${postMessage.image}`);
+            }
+        } catch (err) {
+            console.error('Ошибка при получении самой старой записи из базы данных:', err);
         }
-    } catch (err) {
-        console.error('Ошибка при получении самой старой записи из базы данных:', err);
-    }
-
-    const job = new CronJob(schedule, () => {
-        sendPostToChannel(`Name: ${postMessage.name}\nNew price: ${postMessage.newPrice} ${postMessage.currency}\nOld price: ${postMessage.oldPrice} ${postMessage.currency}\nImage: ${postMessage.image}`);
     });
 
     job.start();

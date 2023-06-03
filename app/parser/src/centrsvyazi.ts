@@ -13,10 +13,8 @@ export interface Product {
 }
 
 export async function parsePage(page: Page): Promise<Product[]> {
-    // Ожидаем появления списка товаров на странице
     await page.waitForSelector('.products .product-item');
 
-    // Получаем список товаров
     const products = await page.$$eval('.products .product-item', (elements) => {
         return elements.map((element) => {
             const nameElement = element.querySelector('.product_link > h3');

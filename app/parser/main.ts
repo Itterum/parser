@@ -1,10 +1,9 @@
-import { scrapController } from "./src/scrap_controller";
+import { runExtractor } from "./src/extractor_runner";
 import { CronJob } from 'cron';
 
 async function run() {
   try {
-    await scrapController('https://centrsvyazi.ru/catalog/phones/apple');
-    await scrapController('https://centrsvyazi.ru/catalog/phones/samsung');
+    await runExtractor('https://centrsvyazi.ru/catalog/phones/apple');
   } catch (error) {
     console.error('Ошибка при выполнении функции run:', error);
   }
