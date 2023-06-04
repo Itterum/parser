@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { CronJob } from 'cron';
-import { getProductFromDB, deleteProductFromDB } from '../../parser/src/db';
+import { getMemFromDB, deleteMemFromDB } from '../../parser/src/db';
 
 const token = process.env.TOKEN;
 
@@ -19,26 +19,18 @@ function sendPostToChannel(message: string) {
 }
 
 async function schedulePostSending() {
-    const schedule = '*/5 * * * *';
+    const schedule = '*/45 * * * *';
     let postMessage = {
-        name: '',
-        newPrice: '',
-        oldPrice: '',
-        currency: '',
         image: '',
     };
 
     const job = new CronJob(schedule, async () => {
         try {
-            const data = await getProductFromDB();
+            const data = await getMemFromDB();
             if (data) {
-                postMessage.name = data.name;
-                postMessage.newPrice = data.newPrice.value;
-                postMessage.oldPrice = data.oldPrice.value;
-                postMessage.currency = data.newPrice.currency;
                 postMessage.image = data.image;
-                await deleteProductFromDB(data);
-                sendPostToChannel(`Name: ${postMessage.name}\nNew price: ${postMessage.newPrice} ${postMessage.currency}\nOld price: ${postMessage.oldPrice} ${postMessage.currency}\nImage: ${postMessage.image}`);
+                await deleteMemFromDB(data);
+                sendPostToChannel(postMessage.image);
             }
         } catch (err) {
             console.error('Ошибка при получении самой старой записи из базы данных:', err);

@@ -1,12 +1,12 @@
-import { Product } from './centrsvyazi';
+import { Mem } from './mems';
 import { MongoClient } from 'mongodb';
 import { v4 as uuidv4 } from 'uuid';
 
 const uri = 'mongodb://mongodb:27017';
-const dbName = 'productsDB';
-const collectionName = 'products';
+const dbName = 'memsDB';
+const collectionName = 'mems';
 
-export async function writeProductsToDB(products: Product[]) {
+export async function writeMemsToDB(mems: Mem[]) {
   const client = new MongoClient(uri);
 
   try {
@@ -16,24 +16,24 @@ export async function writeProductsToDB(products: Product[]) {
     const db = client.db(dbName);
     const collection = db.collection(collectionName);
 
-    for (const product of products) {
-      const productWithId = {
-        ...product,
+    for (const mem of mems) {
+      const memWithId = {
+        ...mem,
         id: uuidv4(),
       };
 
-      await collection.insertOne(productWithId);
+      await collection.insertOne(memWithId);
     }
 
-    console.log('Товары успешно сохранены в базе данных.');
+    console.log('Мемы успешно сохранены в базе данных.');
   } catch (err) {
-    console.error('Ошибка при сохранении продуктов в базе данных:', err);
+    console.error('Ошибка при сохранении мемов в базе данных:', err);
   } finally {
     await client.close();
   }
 }
 
-export async function getProductFromDB() {
+export async function getMemFromDB() {
   const client = new MongoClient(uri);
   let result = null;
 
@@ -57,7 +57,7 @@ export async function getProductFromDB() {
   return result;
 }
 
-export async function deleteProductFromDB(oldestRecord: any) {
+export async function deleteMemFromDB(oldestRecord: any) {
   const client = new MongoClient(uri);
   let result = null;
 

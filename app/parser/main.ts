@@ -3,7 +3,7 @@ import { CronJob } from 'cron';
 
 async function run() {
   try {
-    await runExtractor('https://centrsvyazi.ru/catalog/phones/apple');
+    await runExtractor('https://dtf.ru/kek');
   } catch (error) {
     console.error('Ошибка при выполнении функции run:', error);
   }

@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
-import { writeProductsToDB } from './db';
-import { parsePage } from './centrsvyazi';
+import { writeMemsToDB } from './db';
+import { parsePage } from './mems';
 
 export async function runExtractor(url: string) {
     const browser = await chromium.launch();
@@ -8,9 +8,9 @@ export async function runExtractor(url: string) {
     const page = await browser.newPage();
     await page.goto(url);
 
-    const products = await parsePage(page);
+    const mems = await parsePage(page);
 
-    await writeProductsToDB(products);
+    await writeMemsToDB(mems);
 
     await browser.close();
 }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "dev": "ts-node ./parser/main.ts",
+    "dev": "ts-node ./app/parser/src/mems.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node ./dist/parser/main.js",
 
