@@ -9,10 +9,10 @@ export async function parsePage(page: Page): Promise<Mem[]> {
 
     const products = await page.$$eval('.feed__chunk .feed__item', (elements) => {
         return elements.map((element) => {
-            const imageElement = element.querySelector('.andropov_image');
+            const imageElement = element.querySelector('.andropov_image img');
 
 
-            const image = `${imageElement?.getAttribute('data-image-src')}` || '';
+            const image = `${imageElement?.getAttribute('src')}` || '';
 
             return {
                 image,
