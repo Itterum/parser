@@ -1,10 +1,10 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { CronJob } from 'cron';
-import { getMemFromDB, deleteMemFromDB } from '../../parser/src/db';
+import { getFromDB, deleteFromDB } from '../../parser/src/db';
 
 const token = process.env.TOKEN;
 
-const channelUsername = '@memspepe';
+const channelUsername = '@game_infonews';
 
 const bot = new TelegramBot(token || '', { polling: true });
 
@@ -26,11 +26,11 @@ async function schedulePostSending() {
 
     const job = new CronJob(schedule, async () => {
         try {
-            const data = await getMemFromDB();
+            const data = await getFromDB();
             if (data) {
                 postMessage.image = data.image;
-                await deleteMemFromDB(data);
-                sendPostToChannel(postMessage.image);
+                await deleteFromDB(data);
+                sendPostToChannel(`Ссылка на кртинку: ${data.image}\nНазвание: ${data.name}\nЦена: ${data.newPrice.value} ${data.newPrice.currency}\nЦена до скидки: ${data.oldPrice.value} ${data.oldPrice.currency}`);
             }
         } catch (err) {
             console.error('Ошибка при получении самой старой записи из базы данных:', err);

@@ -1,4 +1,3 @@
-import { Mem } from './mems';
 import { MongoClient } from 'mongodb';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -6,7 +5,7 @@ const uri = 'mongodb://mongodb:27017';
 const dbName = 'memsDB';
 const collectionName = 'mems';
 
-export async function writeMemsToDB(mems: Mem[]) {
+export async function writeToDB<T>(entries: T[]) {
   const client = new MongoClient(uri);
 
   try {
@@ -16,13 +15,13 @@ export async function writeMemsToDB(mems: Mem[]) {
     const db = client.db(dbName);
     const collection = db.collection(collectionName);
 
-    for (const mem of mems) {
-      const memWithId = {
-        ...mem,
+    for (const entrie of entries) {
+      const entrieWithId = {
+        ...entrie,
         id: uuidv4(),
       };
 
-      await collection.insertOne(memWithId);
+      await collection.insertOne(entrieWithId);
     }
 
     console.log('Мемы успешно сохранены в базе данных.');
@@ -33,7 +32,7 @@ export async function writeMemsToDB(mems: Mem[]) {
   }
 }
 
-export async function getMemFromDB() {
+export async function getFromDB() {
   const client = new MongoClient(uri);
   let result = null;
 
@@ -57,7 +56,7 @@ export async function getMemFromDB() {
   return result;
 }
 
-export async function deleteMemFromDB(oldestRecord: any) {
+export async function deleteFromDB(oldestRecord: any) {
   const client = new MongoClient(uri);
   let result = null;
 

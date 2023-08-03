@@ -1,16 +1,21 @@
 import { chromium } from 'playwright';
-import { writeMemsToDB } from './db';
-import { parsePage } from './mems';
+import { writeToDB } from './db';
+import { Product, ProductParser, productConfig } from './centrsvyazi';
 
 export async function runExtractor(url: string) {
     const browser = await chromium.launch();
-    
+
     const page = await browser.newPage();
-    await page.goto(url);
+    await page.goto('https://centrsvyazi.ru/catalog/phones/apple');
 
-    const mems = await parsePage(page);
+    // const page: Page = ...; // Получите объект Page
 
-    await writeMemsToDB(mems);
+    const parser = new ProductParser();
+    const products: Product[] = await parser.parsePage(page, productConfig);
+
+    console.log(products);
+
+    await writeToDB(products);
 
     await browser.close();
 }
