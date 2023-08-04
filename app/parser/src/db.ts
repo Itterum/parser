@@ -24,7 +24,7 @@ export async function writeToDB<T>(entries: T[]) {
       await collection.insertOne(entrieWithId);
     }
 
-    console.log('Мемы успешно сохранены в базе данных.');
+    console.log('Данные успешно сохранены.');
   } catch (err) {
     console.error('Ошибка при сохранении мемов в базе данных:', err);
   } finally {

@@ -19,7 +19,7 @@ function sendPostToChannel(message: string) {
 }
 
 async function schedulePostSending() {
-    const schedule = '*/45 * * * *';
+    const schedule = '*/15 * * * *';
     let postMessage = {
         image: '',
     };
