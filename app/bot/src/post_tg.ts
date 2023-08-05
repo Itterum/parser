@@ -2,8 +2,6 @@ import TelegramBot from 'node-telegram-bot-api';
 import { CronJob } from 'cron';
 import { getFromDB, deleteFromDB } from '../../parser/src/db';
 
-// const template = '<b>Название:</b> ${name}<b>Цена:</b> ${newPrice.value} ${newPrice.currency}<b>Цена до скидки:</b> ${oldPrice.value} ${oldPrice.currency}<a href="${url}">Ссылка на товар</a><a href="${image}">Ссылка на картинку</a>'
-
 const template = `
 *Название*: {name}
 *Цена*: {newPrice.value} {newPrice.currency}
