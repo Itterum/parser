@@ -7,7 +7,6 @@ const template = `
 *Цена*: {newPrice.value} {newPrice.currency}
 *Цена до скидки*: {oldPrice.value} {oldPrice.currency}
 [Ссылка на товар]({url})
-[Ссылка на картинку]({image})
 `;
 
 const token = process.env.TOKEN;
@@ -16,8 +15,8 @@ const channelUsername = '@game_infonews';
 
 const bot = new TelegramBot(token || '', { polling: true });
 
-function sendPostToChannel(message: string) {
-    bot.sendMessage(channelUsername, message, { parse_mode: 'MarkdownV2' })
+function sendPostToChannel(message: string, image: any) {
+    bot.sendPhoto(channelUsername, image, { caption: message, parse_mode: 'MarkdownV2' })
         .then(() => {
             console.log('Пост успешно отправлен в канал');
         })
@@ -36,7 +35,6 @@ async function schedulePostSending() {
                 await deleteFromDB(data);
 
                 const message = template
-                    .replace('{image}', data.image)
                     .replace('{url}', data.url)
                     .replace('{name}', data.name)
                     .replace('{newPrice.value}', data.newPrice.value.toString())
@@ -44,7 +42,7 @@ async function schedulePostSending() {
                     .replace('{oldPrice.value}', data.oldPrice.value.toString())
                     .replace('{oldPrice.currency}', data.oldPrice.currency);
 
-                sendPostToChannel(message);
+                sendPostToChannel(message, data.image);
             }
         } catch (err) {
             console.error('Ошибка при получении самой старой записи из базы данных:', err);
