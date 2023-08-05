@@ -27,7 +27,7 @@ export class ProductParser implements Parser<Product> {
 
                     const image = new URL(element.querySelector(config.imageElement)
                         ?.getAttribute('style')
-                        ?.match(/url\(['"]?(.*?)['"]?\)/)?.[1] ?? '', 'https://centrsvyazi.ru').href;
+                        ?.match(/url\(['"]?(.*?)['"]?\)/)?.[1].replace('micro_img', 'medium_img') ?? '', 'https://centrsvyazi.ru').href;
 
                     const url = new URL(element.querySelector(config.productLink)
                         ?.getAttribute('href') ?? '', 'https://centrsvyazi.ru').href;
