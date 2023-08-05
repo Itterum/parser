@@ -29,11 +29,15 @@ export class ProductParser implements Parser<Product> {
                         ?.getAttribute('style')
                         ?.match(/url\(['"]?(.*?)['"]?\)/)?.[1] ?? '', 'https://centrsvyazi.ru').href;
 
+                    const url = new URL(element.querySelector(config.productLink)
+                        ?.getAttribute('href') ?? '', 'https://centrsvyazi.ru').href;
+
                     return {
                         name,
                         newPrice,
                         oldPrice,
                         image,
+                        url
                     };
                 });
             }, config);

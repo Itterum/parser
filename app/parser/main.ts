@@ -10,7 +10,7 @@ async function run() {
 }
 
 function schedulePostSending() {
-  const schedule = '*/30 * * * *';
+  const schedule = '*/5 * * * *';
 
   try {
     const job = new CronJob(schedule, async () => {

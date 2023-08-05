@@ -10,6 +10,7 @@ export interface Product {
   newPrice: Price;
   oldPrice: Price;
   image: string;
+  url: string;
 }
 
 export const productConfig: ParsingConfig = {
@@ -17,5 +18,6 @@ export const productConfig: ParsingConfig = {
   nameElement: '.product_link > h3',
   newPriceElement: '.price_cart > .doubleprice > .newprice',
   oldPriceElement: '.price_cart > .doubleprice > .oldprice',
-  imageElement: '.product-image'
+  imageElement: '.product-image',
+  productLink: '.product_link'
 };
